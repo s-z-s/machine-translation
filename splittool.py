@@ -1,6 +1,6 @@
 """ This Program Splits Sentences, works only with Linux OS """
 
-import sys, getopt
+import sys, getopt, os
 
 def main(argv):
     filepath = ''
@@ -45,6 +45,8 @@ def main(argv):
 
 	    try:
 		    w = open(outputfile, "w")
+			print 'Output file ok!'
+
 	    except IOError:
 		    print "Couldn't Write a File", outputfile
 
