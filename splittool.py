@@ -1,37 +1,60 @@
 """ This Program Splits Sentences, works only with Linux OS """
 
-filepath = raw_input("Type the text file with the full path")
+import sys, getopt
 
-try:
-	fileName, fileExt = filepath.split('.')	
+def main(argv):
+    filepath = ''
+    outputfile = ''
 
-except IndexError:
-	print "No File Included"
+    try:
+      opts, args = getopt.getopt(argv,"hi:o:",["ifile=","ofile="])
+    except getopt.GetoptError:
+      print 'USAGE: test.py -i <inputfile> -o <outputfile>'
+      sys.exit(2)
+    for opt, arg in opts:
+      if opt == '-h':
+         print 'USAGE: test.py -i <inputfile> -o <outputfile>'
+         print 'Alternatively, use test.py --ifile <inputfile> --ofile <outputfile>'
+         sys.exit()
+      elif opt in ("-i", "--ifile"):
+         inputfile = arg
+      elif opt in ("-o", "--ofile"):
+         outputfile = arg
+    print 'Reading file ', inputfile;
+    print 'Checking if output file ', outputfile, ' can be created'
+
+    filepath = inputfile
+
+    try:
+	    fileName, fileExt = filepath.split('.')
+
+    except IndexError:
+	    print "No File Included"
 
 
+    if fileExt != 'txt':
+	    print "The input file must be a text file, ending in .txt"
+
+    else:
+
+	    try:
+		    f = open(filepath,"r+")
+	    except IOError:
+		    print "Couldn't Open The File..."
 
 
-if fileExt != '.txt':
-	print "The File is Not .txt"
+	    try:
+		    w = open(outputfile, "w")
+	    except IOError:
+		    print "Couldn't Write a File", outputfile
 
+	    text = f.read()
 
-else:
+	    NewText =  text.replace(". ",".\n")
 
-	try:
-		f = open(filepath,"r+")
-	except IOError:
-		print "Couldn't Open The File..."
+	    w.write(NewText)
 
-
-	try:
-		w = open("/tmp/splitedtext.txt","w+")
-	except IOError:
-		print "Couldn't Write a File /temp/splitedtext.txt"
-
-	text = f.read()
-
-	NewText =  text.replace(". ",".\n")
-
-	w.write(NewText)
-
-	print "Splited text file saved in /tmp/splitedtext.txt"
+	    print "Splited text file saved in ", outputfile
+	    
+if __name__ == "__main__":
+   main(sys.argv[1:])
