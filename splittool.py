@@ -1,4 +1,4 @@
-""" This Program Splits Sentences, works only with Linux OS """
+""" This Program Splits Sentences"""
 
 import sys, getopt, os
 
@@ -12,7 +12,7 @@ def main(argv):
       print 'USAGE: test.py -i <inputfile> -o <outputfile>'
       sys.exit(2)
     for opt, arg in opts:
-      if opt == '-h':
+      if opt == '-h':   """ Message to be displayed when -h is entered"""
          print 'USAGE: test.py -i <inputfile> -o <outputfile>'
          print 'Alternatively, use test.py --ifile <inputfile> --ofile <outputfile>'
          sys.exit()
@@ -31,6 +31,7 @@ def main(argv):
     except IndexError:
 	    print "No File Included"
 
+	
 
     if fileExt != 'txt':
 	    print "The input file must be a text file, ending in .txt"
@@ -42,13 +43,26 @@ def main(argv):
 	    except IOError:
 		    print "Couldn't Open The File..."
 
+		if o == "" :
 
-	    try:
-		    w = open(outputfile, "w")
-			print 'Output file ok!'
+			outpath = fileName+"Splited.txt"
+	    
+			try:
+				w = open(outpath, "w")
+				print 'Output file ok!'
 
-	    except IOError:
-		    print "Couldn't Write a File", outputfile
+			except IOError:
+				print "Couldn't Write a File", outputfile
+		
+
+		else :
+
+			try:
+				w = open(outputfile, "w")
+				print 'Output file ok!'
+
+			except IOError:
+				print "Couldn't Write a File", outputfile
 
 	    text = f.read()
 
