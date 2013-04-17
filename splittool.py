@@ -30,7 +30,7 @@ else:
 
 	text = f.read()
 
-	NewText =  text.replace(".",".\n")
+	NewText =  text.replace(". ",".\n")
 
 	w.write(NewText)
 
