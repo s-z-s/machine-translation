@@ -1,0 +1,7 @@
+Hello! 
+This program was developed by Mr. Sajesh Khadgi and Prof. Arzun Kunwar. 
+You can easily break your paragraph into sentences using this program! 
+For example: 
+1. This is a text. 
+2. This is the second line of the text. 
+What more?
