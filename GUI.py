@@ -60,7 +60,7 @@ class mainFrame:
 					   text_padx = 4,
 					   text_pady = 4,)
 		self.st.importfile(filename);
-		self.st.pack(padx = 5, pady = 5, fill = 'both', expand = 1)
+		self.st.pack(padx = 5, pady = 5, expand = 1,side = RIGHT)
 	
 		Pmw.initialise(root)
 
@@ -86,7 +86,7 @@ class mainFrame:
 					   text_padx = 4,
 					   text_pady = 4,)
 		self.st.importfile(filename);
-		self.st.pack(padx = 5, pady = 5, fill = 'both', expand = 1)
+		self.st.pack(padx = 5, pady = 5, expand = 1,side = RIGHT)
 		
 		Pmw.initialise(root)
 
@@ -98,9 +98,7 @@ def main():
 	root.title('Sentence Spliting Tool')
 
 	#create button to convert file:
-        convertButton = Tkinter.Button(root,text='Convert') # change to Button(text='Convert',command = self.convert)
-        convertButton.pack(side = BOTTOM)
-	root.mainloop()
+       	root.mainloop()
 
  
 if __name__ == '__main__':
