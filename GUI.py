@@ -25,7 +25,7 @@ class mainFrame:
 		mb_file.menu = Menu(mb_file)
 		mb_file.menu.add_command(label = 'Open English File',command = self.file_open_english(frame,root))
 		mb_file.menu.add_command(label = 'Open Nepali  File',command = self.file_open_nepali(frame,root))
-                mb_file.menu.add_command(label = 'Exit',command = root.destroy)
+        mb_file.menu.add_command(label = 'Exit',command = root.destroy)
 		mb_edit = Menubutton(menubar,text = 'Edit')
 		mb_edit.pack(side = LEFT)
 		mb_edit.menu = Menu(mb_edit)
@@ -37,8 +37,7 @@ class mainFrame:
 		return
 	
         def convert(self):
-            print "File Successfully converted"
-
+        	print "File Successfully converted"
 
 
 	def file_open_english(self,frame,root):
