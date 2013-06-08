@@ -12,10 +12,6 @@ class mine(wx.Frame):
         self.eng_fileisopen = False
         self.nep_fileisopen = False
 
-        pic = wx.Image("image.bmp", wx.BITMAP_TYPE_BMP).ConvertToBitmap()
-        self.bitmap = wx.StaticBitmap(self, -1, pic, (0,0), (pic.GetWidth(), pic.GetHeight()))
-        self.bitmap_is_there = True
-
         menubar = wx.MenuBar()
         first = wx.Menu()
         second = wx.Menu()
@@ -43,9 +39,6 @@ class mine(wx.Frame):
         self.Bind(wx.EVT_MENU, self.help, how_to_use)
 
     def open_eng_file(self,event):
-        if self.bitmap_is_there == True:
-            self.bitmap.Destroy()
-            self.bitmap_is_there = False
         filedialog = wx.FileDialog(self,
             message = 'Open English file',
             defaultDir = '.',
@@ -62,9 +55,6 @@ class mine(wx.Frame):
         infile_for_eng.close()
 
     def open_nep_file(self,event):
-        if self.bitmap_is_there == True:
-            self.bitmap.Destroy()
-            self.bitmap_is_there = False
         filedialog = wx.FileDialog(self,
             message = 'Open Nepali file',
             defaultDir = '.',
