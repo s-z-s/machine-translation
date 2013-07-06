@@ -12,8 +12,7 @@ class mine(wx.Frame):
         status = self.CreateStatusBar()
         panel = wx.Panel(self)
 
-        self.eng_fileisopen = False
-        self.nep_fileisopen = False
+        self.define_all(self)
 
         pic = wx.Image("image.bmp", wx.BITMAP_TYPE_BMP).ConvertToBitmap()
         self.bitmap = wx.StaticBitmap(self, -1, pic, (0,0), (pic.GetWidth(), pic.GetHeight()))
@@ -45,10 +44,22 @@ class mine(wx.Frame):
         self.Bind(wx.EVT_MENU, self.developers, about_dev)
         self.Bind(wx.EVT_MENU, self.help, how_to_use)
 
+    def define_all(self, event):
+        self.bitmap_is_there = False
+        self.eng_file_is_open = False
+        self.nep_file_is_open = False
+        self.eng_textbox_present = False
+        self.nep_textbox_present = False
+        self.sentences_are_aligned = False
+        self.text_box_is_to_be_shown = False
+        self.another_file = False
+        print ("defined all")
+
     def open_eng_file(self,event):
-        if self.bitmap_is_there == True:
-            self.bitmap.Destroy()
-            self.bitmap_is_there = False
+        if (self.eng_textbox_present == True):
+            self.textdisplay_eng.Destroy()
+            self.eng_textbox_present = False
+
         filedialog = wx.FileDialog(self,
             message = 'Open English file',
             defaultDir = '.',
@@ -56,18 +67,25 @@ class mine(wx.Frame):
             wildcard = 'Textfile (.txt .prn)|*.txt;*.prn|All (.*)|*.*', #!!!!
             style = wx.OPEN)
         if filedialog.ShowModal() == wx.ID_OK:
+            if self.bitmap_is_there == True:
+                self.bitmap.Destroy()
+                self.bitmap_is_there = False
             self.eng_file_input = filedialog.GetPath()
-            self.eng_fileisopen = True
-        infile_for_eng = open(self.eng_file_input, 'r')
-        read_out_eng = infile_for_eng.read()
-        self.textdisplay_eng = wx.TextCtrl(self, -1, pos = (0,0), style = wx.TE_MULTILINE | wx.TE_READONLY | wx.TE_RICH2, size = (300,330))
-        self.textdisplay_eng.SetValue(read_out_eng)
-        infile_for_eng.close()
+            self.eng_file_is_open = True
+            infile_for_eng = open(self.eng_file_input, 'r')
+            read_out_eng = infile_for_eng.read()
+            self.textdisplay_eng = wx.TextCtrl(self, -1, pos = (0,0), style = wx.TE_MULTILINE | wx.TE_READONLY | wx.TE_RICH2, size = (300,330))
+            self.textdisplay_eng.SetValue(read_out_eng)
+            self.eng_textbox_present = True
+            self.another_file = True
+            self.sentences_are_aligned = False
+            infile_for_eng.close()
 
     def open_nep_file(self,event):
-        if self.bitmap_is_there == True:
-            self.bitmap.Destroy()
-            self.bitmap_is_there = False
+        if (self.nep_textbox_present == True):
+            self.textdisplay_nep.Destroy()
+            self.nep_textbox_present = False
+
         filedialog = wx.FileDialog(self,
             message = 'Open Nepali file',
             defaultDir = '.',
@@ -75,21 +93,31 @@ class mine(wx.Frame):
             wildcard = 'Textfile (.txt .prn)|*.txt;*.prn|All (.*)|*.*', #!!!!
             style = wx.OPEN)
         if filedialog.ShowModal() == wx.ID_OK:
+            if self.bitmap_is_there == True:
+                self.bitmap.Destroy()
+                self.bitmap_is_there = False
             self.nep_file_input = filedialog.GetPath()
-            self.nep_fileisopen = True
-        infile_for_nep = open(self.nep_file_input, 'r')
-        read_out_nep = infile_for_nep.read()
-        self.textdisplay_nep = wx.TextCtrl(self, -1, pos = (300,0), style = wx.TE_MULTILINE | wx.TE_READONLY | wx.TE_RICH2, size = (295,330))
-        bytes = read_out_nep
-        unicode_value = bytes.decode('utf-8')
-        self.textdisplay_nep.SetValue(unicode_value)
-        infile_for_nep.close()
+            self.nep_file_is_open = True
+            infile_for_nep = open(self.nep_file_input, 'r')
+            read_out_nep = infile_for_nep.read()
+            self.textdisplay_nep = wx.TextCtrl(self, -1, pos = (300,0), style = wx.TE_MULTILINE | wx.TE_READONLY | wx.TE_RICH2, size = (295,330))
+            bytes = read_out_nep
+            unicode_value = bytes.decode('utf-8')
+            self.textdisplay_nep.SetValue(unicode_value)
+            self.nep_textbox_present = True
+            self.another_file = True
+            self.sentences_are_aligned = False
+            infile_for_nep.close()
 
     def exit_program(self,event):
         self.Close(True)
 
     def align_sentence(self,event):
-        if self.eng_fileisopen == True & self.nep_fileisopen == True:
+        self.text_box_is_to_be_shown = True
+        self.align_sentence_now(event)
+
+    def align_sentence_now(self,event):
+        if self.eng_file_is_open == True & self.nep_file_is_open == True:
             if self.bitmap_is_there == True:
                 self.bitmap.Destroy()
                 self.bitmap_is_there = False
@@ -103,8 +131,12 @@ class mine(wx.Frame):
             i = 0
             j = 1
             p = 1
-            self.textdisplay_eng.Destroy()
-            self.textdisplay_nep.Destroy()
+            if (self.eng_textbox_present == True):
+                self.textdisplay_eng.Destroy()
+                self.eng_textbox_present = False
+            if (self.nep_textbox_present == True):
+                self.textdisplay_nep.Destroy()
+                self.nep_textbox_present = False
             while(i<len(split_eng)):
                 if i == 0:
                     sep = "."
@@ -128,11 +160,6 @@ class mine(wx.Frame):
                 i = i + 1
             outfile_eng.close()
 
-            self.textdisplay_eng = wx.TextCtrl(self, -1, pos = (0,0), style = wx.TE_MULTILINE | wx.TE_READONLY | wx.TE_RICH2, size = (300,330))
-            read_out_eng = open('output_eng.txt', 'r')
-            disp_out_eng = read_out_eng.read()
-            self.textdisplay_eng.SetValue(disp_out_eng)
-
             outfile_nep = codecs.open("output_nep.txt", "w", "utf8")
             nep = re.compile(ur'([\u0964]+\n+\n|[\u0964]\s|[\u003F]\s|[\u0021]\s)', re.UNICODE)
             split_nep = nep.split(nep_file_read)
@@ -155,17 +182,33 @@ class mine(wx.Frame):
                     outfile_nep.write(sent_numbering)
                 i = i + 1
             outfile_nep.close()
+            self.sentences_are_aligned = True
+            self.another_file = False
 
-            self.textdisplay_nep = wx.TextCtrl(self, -1, pos = (300,0), style = wx.TE_MULTILINE|wx.TE_READONLY | wx.TE_RICH2, size = (295,330))
-            read_out_nep = open('output_nep.txt', 'r')
-            disp_out_nep = read_out_nep.read()
-            bytes = disp_out_nep
-            unicode_value = bytes.decode('utf-8')
-            self.textdisplay_nep.SetValue(unicode_value)
+            if (self.text_box_is_to_be_shown == True):
+                self.display_text_box(event)
+
         else:
             dlg = wx.MessageDialog(self, "Please select both parallel files from the file option.","File not selected", wx.OK)  # create a dialog (dlg) box to display the message, and ok button
             dlg.ShowModal()  # show the dialog box, modal means cannot do anything on the program until clicks ok or cancel
             dlg.Destroy()
+
+    def display_text_box(self,event):
+        self.textdisplay_eng = wx.TextCtrl(self, -1, pos = (0,0), style = wx.TE_MULTILINE | wx.TE_READONLY | wx.TE_RICH2, size = (300,330))
+        read_out_eng = open('output_eng.txt', 'r')
+        disp_out_eng = read_out_eng.read()
+        self.textdisplay_eng.SetValue(disp_out_eng)
+        self.eng_textbox_present = True
+
+        self.textdisplay_nep = wx.TextCtrl(self, -1, pos = (300,0), style = wx.TE_MULTILINE|wx.TE_READONLY | wx.TE_RICH2, size = (295,330))
+        read_out_nep = open('output_nep.txt', 'r')
+        disp_out_nep = read_out_nep.read()
+        bytes = disp_out_nep
+        unicode_value = bytes.decode('utf-8')
+        self.textdisplay_nep.SetValue(unicode_value)
+        self.nep_textbox_present = True
+
+        self.text_box_is_to_be_shown = False
 
     def align_phrase(self,event):
         dlg = wx.MessageDialog(self, "This option is still under construction. Please check back after a few days.","Option not available", wx.OK)  # create a dialog (dlg) box to display the message, and ok button
@@ -173,14 +216,50 @@ class mine(wx.Frame):
         dlg.Destroy()
 
     def align_word(self,event):
-        i = 0
-        j = 0
-        if self.eng_fileisopen == True & self.nep_fileisopen == True:
+        if (self.eng_textbox_present == True):
+            self.textdisplay_eng.Destroy()
+            self.eng_textbox_present = False
+            print("destroy ta bhakai ho!!!")
+        if (self.nep_textbox_present == True):
+            self.textdisplay_nep.Destroy()
+            self.nep_textbox_present = False
+        if self.eng_file_is_open == True & self.nep_file_is_open == True:
             if self.bitmap_is_there == True:
                 self.bitmap.Destroy()
                 self.bitmap_is_there = False
-            self.textdisplay_eng.Destroy()
-            self.textdisplay_nep.Destroy()
+            if  (self.another_file == False):
+                if (self.sentences_are_aligned == True):
+                    print("already aligned")
+                    self.align_word_now(event)
+                else:
+                    self.align_sentence_now(event)
+                    print("aligned just now")
+                    self.align_word_now(event)
+            else:
+                self.align_sentence_now(event)
+                print("naya lai sudda align garne bhaisakyo yar!!! :D")
+                self.align_word_now(event)
+        else:
+            dlg = wx.MessageDialog(self, "Please select both parallel files from the file option.","File not selected", wx.OK)  # create a dialog (dlg) box to display the message, and ok button
+            dlg.ShowModal()  # show the dialog box, modal means cannot do anything on the program until clicks ok or cancel
+            dlg.Destroy()
+
+    def align_word_now(self,event):
+        print("the word align begins")
+
+        i = 0
+        j = 0
+        if self.eng_file_is_open == True & self.nep_file_is_open == True:
+            if self.bitmap_is_there == True:
+                self.bitmap.Destroy()
+                self.bitmap_is_there = False
+            if (self.eng_textbox_present == True):
+                self.textdisplay_eng.Destroy()
+                self.eng_textbox_present = False
+                print("destroy ta bhakai ho!!!")
+            if (self.nep_textbox_present == True):
+                self.textdisplay_nep.Destroy()
+                self.nep_textbox_present = False
             pic = wx.Image("loading.bmp", wx.BITMAP_TYPE_BMP).ConvertToBitmap()
             self.bitmap = wx.StaticBitmap(self, -1, pic, (0,0), (pic.GetWidth(), pic.GetHeight()))
 
@@ -246,6 +325,7 @@ class mine(wx.Frame):
             dlg = wx.MessageDialog(self, "Please select both parallel files from the file option.","File not selected", wx.OK)  # create a dialog (dlg) box to display the message, and ok button
             dlg.ShowModal()  # show the dialog box, modal means cannot do anything on the program until clicks ok or cancel
             dlg.Destroy()
+
 
     def developers(self,event):
         dlg = wx.MessageDialog(self, "I am the developer!!! B) :P","About Developers", wx.OK)  # create a dialog (dlg) box to display the message, and ok button
